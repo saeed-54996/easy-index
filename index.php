@@ -1,7 +1,7 @@
 <?php
-// Define the base directory (change to your root directory)
-$baseDirectory = realpath('/home/user/htdocs/site.com/folder-to-index');
-$baseUrl = '/folder-to-index'; // The base URL relative to the site's root
+// Define the base directory
+$baseDirectory = realpath(__DIR__ . '/uploads');
+$baseUrl = '/uploads'; // Adjust this if needed to match your site's structure
 
 // Get the directory to list from the query parameter or default to the base directory
 $directory = isset($_GET['dir']) ? realpath($_GET['dir']) : $baseDirectory;
@@ -58,35 +58,22 @@ $files = array_diff(scandir($directory), ['.', '..']);
                             <?php echo $isDir ? '📁 Directory' : '📄 File'; ?>
                         </div>
                         <?php if ($isDir): ?>
-                            <!-- Link to navigate into the folder -->
-                            <a href="?dir=<?php echo urlencode($filePath); ?>" 
-                               class="text-blue-500 hover:underline truncate">
+                            <a href="?dir=<?php echo urlencode($filePath); }" class="text-blue-500 hover:underline truncate">
                                 <?php echo htmlspecialchars($file); ?>
                             </a>
                         <?php else: ?>
-                            <!-- Link to open the file -->
-                            <a href="<?php echo htmlspecialchars($fileUrl); ?>" 
-                               target="_blank" class="text-blue-500 hover:underline truncate">
+                            <a href="<?php echo htmlspecialchars($fileUrl); }" target="_blank" class="text-blue-500 hover:underline truncate">
                                 <?php echo htmlspecialchars($file); ?>
                             </a>
-                            <!-- Play button for video files -->
                             <?php if ($isVideo): ?>
-                                <button 
-                                    onclick="playVideo('<?php echo htmlspecialchars($fileUrl); ?>')"
+                                <button onclick="playVideo('<?php echo htmlspecialchars($fileUrl); ?>')"
                                     class="bg-green-500 text-white px-4 py-2 mt-2 rounded shadow hover:bg-green-600">
                                     ▶ Play Video
                                 </button>
                             <?php endif; ?>
                         <?php endif; ?>
                         <span class="text-gray-500 text-xs mt-2">
-                            <?php
-                            if ($isDir) {
-                                echo '-';
-                            } else {
-                                // Display size in MB with 2 decimal places
-                                echo number_format(filesize($filePath) / (1024 * 1024), 2) . ' MB';
-                            }
-                            ?>
+                            <?php echo $isDir ? '-' : number_format(filesize($filePath) / (1024 * 1024), 2) . ' MB'; ?>
                         </span>
                     </div>
                 <?php endforeach; ?>
@@ -96,16 +83,14 @@ $files = array_diff(scandir($directory), ['.', '..']);
 
     <!-- Video Player Modal -->
     <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center hidden">
-    <div class="bg-white rounded-lg shadow-lg p-4 relative w-11/12 sm:w-3/4 lg:w-1/2 max-h-screen overflow-auto">
-        <button 
-            onclick="closeModal()" 
-            class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600 z-[999]">
-            ✖ Close
-        </button>
-        <video id="videoPlayer" class="w-full max-h-[75vh] object-contain" controls></video>
+        <div class="bg-white rounded-lg shadow-lg p-4 relative w-11/12 sm:w-3/4 lg:w-1/2 max-h-screen overflow-auto">
+            <button onclick="closeModal()" 
+                class="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded shadow hover:bg-red-600 z-[999]">
+                ✖ Close
+            </button>
+            <video id="videoPlayer" class="w-full max-h-[75vh] object-contain" controls></video>
+        </div>
     </div>
-</div>
-
 
     <script>
         function playVideo(url) {
