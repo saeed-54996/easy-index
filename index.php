@@ -58,11 +58,11 @@ $files = array_diff(scandir($directory), ['.', '..']);
                             <?php echo $isDir ? '📁 Directory' : '📄 File'; ?>
                         </div>
                         <?php if ($isDir): ?>
-                            <a href="?dir=<?php echo urlencode($filePath); }" class="text-blue-500 hover:underline truncate">
+                            <a href="?dir=<?php echo urlencode($filePath); ?>" class="text-blue-500 hover:underline truncate">
                                 <?php echo htmlspecialchars($file); ?>
                             </a>
                         <?php else: ?>
-                            <a href="<?php echo htmlspecialchars($fileUrl); }" target="_blank" class="text-blue-500 hover:underline truncate">
+                            <a href="<?php echo htmlspecialchars($fileUrl); ?>" target="_blank" class="text-blue-500 hover:underline truncate">
                                 <?php echo htmlspecialchars($file); ?>
                             </a>
                             <?php if ($isVideo): ?>
